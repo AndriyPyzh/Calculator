@@ -22,17 +22,17 @@
                 } else {
                     $.post("http://localhost:3000/users/login", {username, password}, function (data) {
                         alert("Logged in");
-                        alert(data.token);
                         localStorage.setItem("access-token", data.token);
+                        localStorage.setItem("username", username);
+                        window.location.href = "http://localhost:3000/calculator.html";
                     }).fail(function (data) {
                         alert("error: " + data.responseText);
                     });
-
                 }
             });
         });
     </script>
-    <title>Document</title>
+    <title>Sign in</title>
 </head>
 <body>
 <div class="container my-4">

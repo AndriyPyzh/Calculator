@@ -14,6 +14,22 @@ require('./startup/routes')(app);
 app.use('/', express.static('views'))
 // app.use(express.static('/signin.html'))
 
+app.get('/tasks', (req,res) => {
+    res.send([
+        {
+            name: 'task1',
+            percentage: 25,
+        },
+        {
+            name: 'task2',
+            percentage: 75,
+        },
+        {
+            name: 'task3',
+            percentage: 45,
+        }])
+})
+
 app.use(helmet());
 app.use(morgan('tiny'));
 

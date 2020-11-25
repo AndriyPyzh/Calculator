@@ -1,0 +1,233 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#menu').load('menu.html');
+
+            $("#varsNum").change(function () {
+                changeSystem();
+            });
+            $("#eqNum").change(function () {
+                changeSystem();
+            });
+
+            $("#solve").click(function () {
+                let allVal = [];
+                $("#system input").each(function () {
+                    allVal.push($(this).val());
+                });
+                allVal = allVal.map(x => parseInt(x));
+                if (allVal.some(x => isNaN(x))) {
+                    alert("Incorrect data")
+                } else {
+                    let data = [];
+                    let vars = parseInt($("#varsNum").val());
+                    let eqs = parseInt($("#eqNum").val());
+                    for (let i = 0; i < eqs; i++) {
+                        data.push([]);
+                        for (let j = 0; j < vars + 1; j++) {
+                            data[i][j] = allVal[i * (vars + 1) + j];
+                        }
+                    }
+                    $.ajax({
+                        url: '"http://localhost:3000/calculate"',
+                        headers: {
+                            'x-auth-token': localStorage.getItem("access-token")
+                        },
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {data},
+                        success: function (data) {
+                            alert("Data Send");
+                            window.location.href = "http://localhost:3000/history.html";
+                        },
+                        error: function (data) {
+                            alert("error: " + data.responseText);
+                        }
+                    });
+                }
+            })
+        });
+
+        function changeSystem() {
+            let vars = parseInt($("#varsNum").val());
+            let eqs = parseInt($("#eqNum").val());
+            let system = generateSystem(vars, eqs);
+            $("#system").replaceWith(system);
+        }
+
+        function generateSystem(varN, eqN) {
+            let colsNum = varN + varN - 1 + 2;
+            var system = `<div id="system" class="container mt-lg-5" style="width: ${colsNum * 100 + 50 - 300 / colsNum}px;  height: 300px; font-size: 25px">`;
+            for (let i = 0; i < eqN; i++) {
+                system += `<div class="row row-cols-${colsNum} mt-lg-4">`;
+
+                system +=
+                    `<div class="col d-flex justify-content-center">
+                        <input type="text" class="form-control" style="width: 50px;height: 30px">
+                        <span class="ml-2">x1</span>
+                    </div>`;
+                for (let j = 0; j < varN - 1; j++) {
+                    system +=
+                        `<div class="col-sm-1 d-flex justify-content-center">
+                             <span>+</span>
+                         </div>`;
+
+                    system +=
+                        `<div class="col d-flex justify-content-center">
+                             <input type="text" class="form-control" style="width: 50px;height: 30px">
+                             <span class="ml-2">x${j + 2}</span>
+                        </div>`;
+                }
+                system +=
+                    `<div class="col-sm-1 d-flex justify-content-center">
+                        <span>=</span>
+                    </div>
+                    <div class="col d-flex justify-content-center">
+                      <input type="text" class="form-control" style="width: 50px;height: 30px">
+                    </div>`;
+                system += `</div>`;
+            }
+            system += `</div>`;
+            return system;
+        }
+    </script>
+    <title>Calculator</title>
+</head>
+<body>
+<div id="menu" class="mb-5"></div>
+<div class="container mt-lg-5">
+    <h1 class="d-flex align-items-center justify-content-center mb-5">Linear Equation Calculator</h1>
+    <div class="row" style="font-size: 30px">
+        <div class="col d-flex align-self-center justify-content-end">
+            <div class="row">
+                <span class="col">Variables</span>
+                <div class="col form-group">
+                    <form class="mr-3 mt-1">
+                        <select class="form-control" id="varsNum">
+                            <option>1</option>
+                            <option>2</option>
+                            <option selected>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col d-flex align-self-center justify-content-start">
+            <div class="row">
+                <span class="col m-0">Equations</span>
+                <div class="col form-group">
+                    <form class="mr-3 mt-1">
+                        <select id="eqNum" class="form-control">
+                            <option>1</option>
+                            <option>2</option>
+                            <option selected>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="system" class="container mt-lg-5" style="width: 800px; height: 300px; font-size: 25px">
+        <div class="row row-cols-7 mt-lg-4">
+            <div class="col d-flex justify-content-center">
+                <input type="text" class="form-control" style="width: 50px;height: 30px">
+                <span class="ml-2">x1</span>
+            </div>
+            <div class="col-sm-1 d-flex justify-content-center">
+                <span>+</span>
+            </div>
+            <div class="col d-flex justify-content-center">
+                <input type="text" class="form-control" style="width: 50px;height: 30px">
+                <span class="ml-2">x2</span>
+            </div>
+            <div class="col-sm-1 d-flex justify-content-center">
+                <span>+</span>
+            </div>
+            <div class="col d-flex justify-content-center">
+                <input type="text" class="form-control" style="width: 50px;height: 30px">
+                <span class="ml-2">x3</span>
+            </div>
+            <div class="col-sm-1 d-flex justify-content-center">
+                <span>=</span>
+            </div>
+            <div class="col d-flex justify-content-center">
+                <input type="text" class="form-control" style="width: 50px;height: 30px">
+            </div>
+        </div>
+        <div class="row row-cols-7 mt-lg-4">
+            <div class="col d-flex justify-content-center">
+                <input type="text" class="form-control" style="width: 50px;height: 30px">
+                <span class="ml-2">x1</span>
+            </div>
+            <div class="col-sm-1 d-flex justify-content-center">
+                <span>+</span>
+            </div>
+            <div class="col d-flex justify-content-center">
+                <input type="text" class="form-control" style="width: 50px;height: 30px">
+                <span class="ml-2">x2</span>
+            </div>
+            <div class="col-sm-1 d-flex justify-content-center">
+                <span>+</span>
+            </div>
+            <div class="col d-flex justify-content-center">
+                <input type="text" class="form-control" style="width: 50px;height: 30px">
+                <span class="ml-2">x3</span>
+            </div>
+            <div class="col-sm-1 d-flex justify-content-center">
+                <span>=</span>
+            </div>
+            <div class="col d-flex justify-content-center">
+                <input type="text" class="form-control" style="width: 50px;height: 30px">
+            </div>
+        </div>
+        <div class="row row-cols-7 mt-lg-4">
+            <div class="col d-flex justify-content-center">
+                <input type="text" class="form-control" style="width: 50px;height: 30px">
+                <span class="ml-2">x1</span>
+            </div>
+            <div class="col-sm-1 d-flex justify-content-center">
+                <span>+</span>
+            </div>
+            <div class="col d-flex justify-content-center">
+                <input type="text" class="form-control" style="width: 50px;height: 30px">
+                <span class="ml-2">x2</span>
+            </div>
+            <div class="col-sm-1 d-flex justify-content-center">
+                <span>+</span>
+            </div>
+            <div class="col d-flex justify-content-center">
+                <input type="text" class="form-control" style="width: 50px;height: 30px">
+                <span class="ml-2">x3</span>
+            </div>
+            <div class="col-sm-1 d-flex justify-content-center">
+                <span>=</span>
+            </div>
+            <div class="col d-flex justify-content-center">
+                <input type="text" class="form-control" style="width: 50px;height: 30px">
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center mt-lg-5">
+        <button id="solve" type="button" class="btn btn-lg btn-primary">solve</button>
+    </div>
+
+</div>
+
+
+</body>
+</html>
