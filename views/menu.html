@@ -5,7 +5,7 @@
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
-
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -41,18 +41,26 @@
     </script>
     <title>Menu</title>
 </head>
+<style type="text/css">
+    body {
+        font-family: 'Varela Round', sans-serif;
+    }
+    .navbar-orange {
+        background-color: lightsalmon !important;
+    }
+</style>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-orange navbar-light bg-light">
     <div class="collapse navbar-collapse" style="font-size: x-large">
         <ul class="navbar-nav mr-auto ml-5">
             <li class="nav-item d-flex justify-content-center" style="width: 160px">
                 <a id="calc" class="navbar-brand" style="font-size: xx-large" href="calculator.html">Calculator</a>
             </li>
             <li class="nav-item d-flex justify-content-center" style="width: 160px">
-                <a id="prog" class="nav-link mt-1" href="progress.html">Progress</a>
+                <a id="prog" class="nav-link" href="progress.html">Progress</a>
             </li>
             <li class="nav-item" style="width: 160px">
-                <a id="hist" class="nav-link mt-1" href="history.html">History</a>
+                <a id="hist" class="nav-link " href="history.html">History</a>
             </li>
         </ul>
     </div>

@@ -5,11 +5,12 @@
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
-
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $("#login").click(function () {
@@ -32,38 +33,128 @@
             });
         });
     </script>
+    <style>
+        .card .modal-footer {
+            color: #999;
+            border-color: #dee4e7;
+            text-align: center;
+            margin: 0 -25px -25px;
+            font-size: 13px;
+            justify-content: center;
+        }
+    </style>
     <title>Sign in</title>
+</head>
+
+    <style type="text/css">
+        body {
+            font-family: 'Varela Round', sans-serif;
+        }
+        .btn-black{
+            background-color: darksalmon;
+            color: black;}
+        .btn-black:hover{
+            color: white;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-control {
+            min-height: 38px;
+            padding-left: 5px;
+            box-shadow: none !important;
+            border-width: 0 0 1px 0;
+            border-radius: 0;
+        }
+        .input-group-addon {
+            max-width: 42px;
+            background: none;
+            border-width: 0 0 0 0;
+            padding-right: 5px;
+            padding-top: 7px ;
+        }
+    </style>
 </head>
 <body>
 <div class="container my-4">
     <div class="row d-flex align-items-center justify-content-center mt-5">
-        <aside class="col-sm-4">
+        <aside class="col-sm-5">
             <div class="card">
-                <article class="card-body">
-                    <a href="./signup.html" class="float-right btn btn-outline-primary">Sign up</a>
-                    <h4 class="card-title mb-4 mt-1">Sign in</h4>
-                    <div>
+                <h5 class="modal-title info-color white-text text-center py-4">
+                    <strong>Calculator</strong>
+                </h5>
+                <!--Card content-->
+                <div class="card-body px-lg-5 pt-0">
+                    <!-- Form -->
+                    <form class="text-center" style="color: #757575;">
+                        <!-- Email -->
                         <div class="form-group">
-                            <label>Your username</label>
-                            <input name="username" class="form-control" placeholder="Username" type="text">
-                        </div>
-                        <div class="form-group">
-                            <label>Your password</label>
-                            <input name="password" class="form-control" placeholder="******" type="password">
-                        </div>
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label> <input type="checkbox"> Save password </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="text" class="form-control" name="username" placeholder="Username" required="required">
                             </div>
                         </div>
                         <div class="form-group">
-                            <button id="login" type="submit" class="btn btn-primary btn-block"> Login</button>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                <input type="password" class="form-control" name="password" placeholder="Password" required="required">
+                            </div>
                         </div>
-                    </div>
-                </article>
+                        <div class="d-flex justify-content-around">
+                            <div>
+                                <!-- Remember me -->
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="materialLoginFormRemember">
+                                    <label class="form-check-label" for="materialLoginFormRemember">Remember me</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Sign in button -->
+                        <div class="form-group">
+                            <button id="login" type="submit" class="btn my-4 waves-effect btn-black btn-block  btn-lg" >Log In</button>
+                        </div>
+
+                        <!-- Register -->
+                        <p>Don't have an account?
+                            <a href="./signup.html" style="color:#e9967a">Create one</a>
+                        </p>
+                    </form>
+                </div>
             </div>
         </aside>
     </div>
 </div>
+
+<!--<div class="container my-4">-->
+<!--    <div class="row d-flex align-items-center justify-content-center mt-5">-->
+<!--        <aside class="col-sm-5">-->
+<!--            <div class="card">-->
+<!--                <article class="card-body">-->
+<!--                    <a href="./signup.html" class="float-right btn btn-outline-primary">Sign up</a>-->
+<!--                    <h4 class="card-title mb-4 mt-1">Sign in</h4>-->
+<!--                    <div>-->
+<!--                        <div class="form-group">-->
+<!--                            <label>Your username</label>-->
+<!--                            <input name="username" class="form-control" placeholder="Username" type="text">-->
+<!--                        </div>-->
+<!--                        <div class="form-group">-->
+<!--                            <label>Your password</label>-->
+<!--                            <input name="password" class="form-control" placeholder="******" type="password">-->
+<!--                        </div>-->
+<!--                        <div class="form-group">-->
+<!--                            <div class="checkbox">-->
+<!--                                <label> <input type="checkbox"> Save password </label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="form-group">-->
+<!--                            <button id="login" type="submit" class="btn btn-primary btn-block"> Login</button>-->
+<!--                        </div>-->
+<!--                        <div class="modal-footer">Don't have an account? <a href="#"> Create one</a></div>-->
+<!--                    </div>-->
+<!--                </article>-->
+<!--            </div>-->
+<!--        </aside>-->
+<!--    </div>-->
+<!--</div>-->
 </body>
 </html>
