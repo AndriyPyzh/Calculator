@@ -20,7 +20,7 @@ const createTask = asyncHandler(async (req, res) => {
 
     await task.save();
 
-    runTask(task)
+    runTask(task, creator);
 
     res.status(StatusCodes.CREATED).json(task);
 });

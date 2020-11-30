@@ -1,18 +1,21 @@
+import {Tasks} from "../models/Task";
+
 require('dotenv').config();
 
 
-const runTask = async (task) => {
+const runTask = async (task, creator) => {
     task.status = 'running';
     task.startedAt = Date.now();
 
     await task.save();
-
-    calculate(task);
+    calculate(task, creator);
 };
 
-const calculate = async (task) => {
+const calculate = async (task, creator) => {
     let error = false;
     const timeToSleep = process.env.SLEEP_TIME;
+
+    task = await Tasks.findOne({name: task.name, user: creator});
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -46,11 +49,14 @@ const calculate = async (task) => {
             }
             if (task.isStopped) {
                 task.status = 'finished';
+                error = true;
                 await task.save();
                 return;
             }
-            console.log(task.name);
+            console.log(task.name + task.progress);
             await task.save();
+
+            task = await Tasks.findOne({name: task.name, user: creator});
         }
     }
 
@@ -98,21 +104,35 @@ const calculate = async (task) => {
         for (let i = 0; i < m; ++i) {
             x.push(M[i][n - 1]);
         }
+        if (error) {
+            return;
+        }
         return x;
     }
 
     async function solve(A, b) {
         await makeM(A, b);
 
-        await diagonalize(A)
+        await diagonalize(A);
+
+        if (error) {
+            return;
+        }
 
         await substitute(A);
+        if (error) {
+            return;
+        }
 
         return extractX(A);
+
     }
 
-    task.result = await solve(matrix, vector);
-    console.log(task.result);
+    const res = await solve(matrix, vector);
+    if (error) {
+        return;
+    }
+    task.result = res;
     await task.save();
 };
 
