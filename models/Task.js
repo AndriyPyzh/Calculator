@@ -16,6 +16,10 @@ const TaskSchema = new Schema({
         type: [Number],
         required: true,
     },
+    result: {
+        type: [Number],
+        required: false,
+    },
     isPaused:{
         type:Boolean,
         default: false
@@ -23,10 +27,6 @@ const TaskSchema = new Schema({
     isStopped:{
         type:Boolean,
         default: false
-    },
-    result: {
-        type: [Number],
-        required: false,
     },
     status: {
         type: String,
