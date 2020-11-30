@@ -13,6 +13,9 @@ require('./startup/db')();
 require('./startup/routes')(app);
 app.use('/', express.static('views'))
 // app.use(express.static('/signin.html'))
+app.use('/hello',async (req,res)=>{
+    return res.json('hello');
+})
 
 app.get('/tasks', (req,res) => {
     res.send([

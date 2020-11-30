@@ -23,7 +23,7 @@
                 let tasks;
                 $.ajax({
                     type: 'GET',
-                    url: `http://localhost:3000/tasks?username=${username}`,
+                    url: `http://localhost:4001/tasks?username=${username}`,
                     headers: {
                         'x-auth-token': localStorage.getItem("access-token")
                     },
@@ -35,7 +35,7 @@
                         let tasksHtml = '<div id="tasks">';
                         tasks.forEach(task => {
                             tasksHtml += `
-                            <div class="row card mt-6" style="height: 170px">
+                            <div class="row card mt-8" style="height: 170px">
                                 <div class="card-body">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h3 class="float-left">${task.name}</h3>
@@ -48,24 +48,8 @@
                                     <button id="pause" type="button" class="btn btn-lg bt ml-3 btn-black" >Pause</button>
                                 </div>
                             </div>
+                          </div>
                             <br>`
-                            // tasksHtml += `
-                            //     <div class="row card mt-3" style="height: 170px">
-                            //         <div class="card-body">
-                            //             <h3>${task.name}</h3>
-                            //             <div class="progress mt-3" style="width: 790px">
-                            //             <div class="progress-bar progress-bar-striped progress-bar-animated " role="progressbar" style="width: ${task.percentage}%" aria-valuenow="75"
-                            //                      aria-valuemin="0"
-                            //                      aria-valuemax="100"></div>
-                            //             </div>
-                            //             <button id="${task.name}" type="button" class="btn btn-lg btn-light mt-4"
-                            //                     data-toggle="modal" data-target="#exampleModalCenter">Matrixes</button>
-                            //             <div class="float-right mt-4">
-                            //                 <button type="button" class="btn btn-lg btn-secondary">Pause</button>
-                            //                 <button type="button" class="btn btn-lg btn-danger ml-3">Stop</button>
-                            //             </div>
-                            //         </div>
-                            //     </div>`
                         })
                         tasksHtml += '</div>'
 
@@ -101,44 +85,8 @@
             <div style="width: 1300px">
                 <br>
                 <div id="tasks">
-        <!--            <div class="row card mt-6" style="height: 170px">-->
-        <!--                <div class="card-body">-->
-        <!--                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
-        <!--                    <h3 class="float-left">task</h3>-->
-        <!--                    <div class="progress mt-8" style="width: 1200px">-->
-
-        <!--                        <div class="progress-bar progress-bar-orange progress-bar-striped progress-bar-animated text-dark font-weight-bold" role="progressbar" style="width: 75% "  aria-valuenow="75"-->
-        <!--                             aria-valuemin="0"-->
-        <!--                             aria-valuemax="100">75%</div>-->
-        <!--                    </div>-->
-        <!--                    <div class="float-right mt-4">-->
-        <!--                        <button id="pause" type="button" class="btn btn-lg bt ml-3 btn-black" >Pause</button>-->
-
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
                 </div>
             </div>
         </div>
-
-
-    <!--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">-->
-    <!--    <div class="modal-dialog modal-dialog-centered" role="document">-->
-    <!--        <div class="modal-content">-->
-    <!--            <div class="modal-header">-->
-    <!--                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>-->
-    <!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-    <!--                    <span aria-hidden="true">&times;</span>-->
-    <!--                </button>-->
-    <!--            </div>-->
-    <!--            <div class="modal-body">-->
-
-    <!--            </div>-->
-    <!--            <div class="modal-footer">-->
-    <!--                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--</div>-->
     </body>
 </html>

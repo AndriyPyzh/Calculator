@@ -16,7 +16,7 @@
             $("#logout").click(function () {
                 localStorage.removeItem("access-token");
                 localStorage.removeItem("username");
-                window.location.href = "http://localhost:3000/signin.html";
+                window.location.href = "http://localhost:4001/signin.html";
             });
 
             let location = window.location.href;
@@ -54,7 +54,7 @@
     <div class="collapse navbar-collapse" style="font-size: x-large">
         <ul class="navbar-nav mr-auto ml-5">
             <li class="nav-item d-flex justify-content-center" style="width: 160px">
-                <a id="calc" class="navbar-brand" style="font-size: xx-large" href="calculator.html">Calculator</a>
+                <a id="calc" class="navbar-brand" style="font-size: xx-large" href="calculator.html">Newton</a>
             </li>
             <li class="nav-item d-flex justify-content-center" style="width: 160px">
                 <a id="prog" class="nav-link" href="progress.html">Progress</a>

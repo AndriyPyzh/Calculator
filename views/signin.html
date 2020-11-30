@@ -21,11 +21,11 @@
                     $('input[name="username"],input[type="password"]').css("box-shadow", "0 0 3px red");
                     alert("Please fill all fields...!!!!!!");
                 } else {
-                    $.post("http://localhost:3000/users/login", {username, password}, function (data) {
+                    $.post("http://localhost:4001/users/login", {username, password}, function (data) {
                         alert("Logged in");
                         localStorage.setItem("access-token", data.token);
                         localStorage.setItem("username", username);
-                        window.location.href = "http://localhost:3000/calculator.html";
+                        window.location.href = "http://localhost:4001/calculator.html";
                     }).fail(function (data) {
                         alert("error: " + data.responseText);
                     });
@@ -33,16 +33,6 @@
             });
         });
     </script>
-    <style>
-        .card .modal-footer {
-            color: #999;
-            border-color: #dee4e7;
-            text-align: center;
-            margin: 0 -25px -25px;
-            font-size: 13px;
-            justify-content: center;
-        }
-    </style>
     <title>Sign in</title>
 </head>
 
@@ -74,30 +64,27 @@
             padding-top: 7px ;
         }
     </style>
-</head>
 <body>
 <div class="container my-4">
     <div class="row d-flex align-items-center justify-content-center mt-5">
         <aside class="col-sm-5">
             <div class="card">
                 <h5 class="modal-title info-color white-text text-center py-4">
-                    <strong>Calculator</strong>
+                    <strong>Newon Interpolation</strong>
                 </h5>
                 <!--Card content-->
-                <div class="card-body px-lg-5 pt-0">
-                    <!-- Form -->
-                    <form class="text-center" style="color: #757575;">
+                <div class="card-body px-lg-5 pt-0 text-center" style="color: #757575;">
                         <!-- Email -->
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input type="text" class="form-control" name="username" placeholder="Username" required="required">
+                                <input type="text" class="form-control" name="username" placeholder="Username" >
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input type="password" class="form-control" name="password" placeholder="Password" required="required">
+                                <input type="password" class="form-control" name="password" placeholder="Password" >
                             </div>
                         </div>
                         <div class="d-flex justify-content-around">
@@ -118,43 +105,10 @@
                         <p>Don't have an account?
                             <a href="./signup.html" style="color:#e9967a">Create one</a>
                         </p>
-                    </form>
                 </div>
             </div>
         </aside>
     </div>
 </div>
-
-<!--<div class="container my-4">-->
-<!--    <div class="row d-flex align-items-center justify-content-center mt-5">-->
-<!--        <aside class="col-sm-5">-->
-<!--            <div class="card">-->
-<!--                <article class="card-body">-->
-<!--                    <a href="./signup.html" class="float-right btn btn-outline-primary">Sign up</a>-->
-<!--                    <h4 class="card-title mb-4 mt-1">Sign in</h4>-->
-<!--                    <div>-->
-<!--                        <div class="form-group">-->
-<!--                            <label>Your username</label>-->
-<!--                            <input name="username" class="form-control" placeholder="Username" type="text">-->
-<!--                        </div>-->
-<!--                        <div class="form-group">-->
-<!--                            <label>Your password</label>-->
-<!--                            <input name="password" class="form-control" placeholder="******" type="password">-->
-<!--                        </div>-->
-<!--                        <div class="form-group">-->
-<!--                            <div class="checkbox">-->
-<!--                                <label> <input type="checkbox"> Save password </label>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="form-group">-->
-<!--                            <button id="login" type="submit" class="btn btn-primary btn-block"> Login</button>-->
-<!--                        </div>-->
-<!--                        <div class="modal-footer">Don't have an account? <a href="#"> Create one</a></div>-->
-<!--                    </div>-->
-<!--                </article>-->
-<!--            </div>-->
-<!--        </aside>-->
-<!--    </div>-->
-<!--</div>-->
 </body>
 </html>
