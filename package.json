@@ -23,12 +23,12 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.14",
     "morgan": "^1.10.0",
-    "swagger-ui-express": "^4.1.4"
+    "swagger-ui-express": "^4.1.4",
+    "system-sleep": "^1.3.7",
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
-    "mgr-swagger-express": "0.0.6",
     "nodemon": "^2.0.6",
     "rimraf": "^3.0.2"
   }
