@@ -1,31 +1,15 @@
-var sleep = require('system-sleep');
-require('coffee-register');
-var {Thread} = require('thread');
 
+function start(callback){
+    setTimeo
+    console.log('start');
+    return callback();
+}
 
-t1 = new Thread(function a(){
-                    for(let i=0;i< 10;i++){
-                        sleep(1000); // sleep for 10 seconds
+function end(){
+    console.log('end');
+    return true;
+}
 
-                        console.log('hello');
-                    }
-                    sleep(10*1000); // sleep for 10 seconds
-                });
+var res = start(end);
 
-t2 = new Thread(function b(){
-                    for(let i=0;i< 10;i++){
-                        sleep(1000); // sleep for 10 seconds
-
-                        console.log('bye');
-                    }
-                    sleep(10*1000); // sleep for 10 seconds
-                });
-
-
-
-t1.run()
-t2.run()
-
-
-
-
+console.log(res);

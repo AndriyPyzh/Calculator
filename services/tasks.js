@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+
 const runTask = async (task) => {
     task.status = 'running';
     task.startedAt = Date.now();
@@ -8,14 +11,11 @@ const runTask = async (task) => {
 };
 
 const calculate = async (task) => {
-    const timeToSleep = 10000;
+    let error = false;
+    const timeToSleep = process.env.SLEEP_TIME;
 
-    function sleep(milliseconds) {
-        const date = Date.now();
-        let currentDate = null;
-        do {
-            currentDate = Date.now();
-        } while (currentDate - date < milliseconds);
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     let {matrix, vector} = task;
@@ -25,13 +25,14 @@ const calculate = async (task) => {
         const n = M[0].length;
         let i_max;
         for (let k = 0; k < Math.min(m, n); ++k) {
-
-            sleep(timeToSleep);
+            await sleep(timeToSleep);
 
             i_max = findPivot(M, k);
             if (matrix[i_max][k] === 0)
                 await swap_rows(M, k, i_max);
             for (let i = k + 1; i < m; ++i) {
+
+                await task.save();
                 const c = matrix[i][k] / matrix[k][k];
                 for (let j = k + 1; j < n; ++j) {
                     matrix[i][j] = matrix[i][j] - matrix[k][j] * c;
@@ -39,12 +40,16 @@ const calculate = async (task) => {
                 M[i][k] = 0;
             }
 
-            task.progress += 100 / Math.min(m, n);
+            task.progress += 100 / (Math.min(m, n));
             if (task.progress >= 100) {
                 task.status = 'finished';
             }
+            if (task.isStopped) {
+                task.status = 'finished';
+                await task.save();
+                return;
+            }
             console.log(task.name);
-
             await task.save();
         }
     }
@@ -99,7 +104,7 @@ const calculate = async (task) => {
     async function solve(A, b) {
         await makeM(A, b);
 
-        await diagonalize(A);
+        await diagonalize(A)
 
         await substitute(A);
 

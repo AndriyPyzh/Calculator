@@ -43,7 +43,7 @@ const getRunningTasks = asyncHandler(async (req, res) => {
     const user = req.user;
 
     const creator = await Users.findOne({username: user});
-    const tasks = await Tasks.find({user: creator, status: 'running'});
+    const tasks = await Tasks.find({user: creator, status: 'running'}).sort({ startedAt : -1});
 
     res.status(StatusCodes.OK).json(tasks);
 });
@@ -52,14 +52,15 @@ const getFinishedTasks = asyncHandler(async (req, res) => {
     const user = req.user;
 
     const creator = await Users.findOne({username: user});
-    const tasks = await Tasks.find({user: creator, status: 'finished'});
+    const tasks = await Tasks.find({user: creator, status: 'finished'}).sort({ startedAt : -1});
 
     res.status(StatusCodes.OK).json(tasks);
 });
 
 const stopTask = asyncHandler(async (req, res) => {
-    const {name} = req.path,
+    const {name} = req.params,
         user = req.user;
+    console.log('hello');
 
     const creator = await Users.findOne({username: user});
     const task = await Tasks.findOne({name, user: creator});
@@ -74,22 +75,5 @@ const stopTask = asyncHandler(async (req, res) => {
     res.status(StatusCodes.OK).json(task);
 });
 
-const pauseTask = asyncHandler(async (req, res) => {
-    const {name} = req.path,
-        user = req.user;
 
-    const creator = await Users.findOne({username: user});
-    const task = await Tasks.findOne({name, user: creator});
-
-    if (!task) {
-        res.status(StatusCodes.NOT_FOUND).json();
-    }
-
-    task.isPaused = true;
-    await task.save()
-
-    res.status(StatusCodes.OK).json(task);
-});
-
-
-module.exports = {createTask, getRunningTasks, getFinishedTasks, getTask, stopTask, pauseTask};
+module.exports = {createTask, getRunningTasks, getFinishedTasks, getTask, stopTask};

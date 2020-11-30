@@ -30,26 +30,29 @@
                 if (allVal.some(x => isNaN(x))) {
                     alert("Incorrect data")
                 } else {
-                    let data = [];
+                    let matrix = [];
+                    let vector = [];
                     let vars = parseInt($("#varsNum").val());
                     let eqs = parseInt($("#eqNum").val());
                     for (let i = 0; i < eqs; i++) {
-                        data.push([]);
-                        for (let j = 0; j < vars + 1; j++) {
-                            data[i][j] = allVal[i * (vars + 1) + j];
+                        matrix.push([]);
+                        for (let j = 0; j < vars; j++) {
+                            matrix[i][j] = allVal[i * (vars + 1) + j];
                         }
+                        vector[i] = allVal[i * (vars + 1) + vars];
                     }
+
                     $.ajax({
-                        url: '"http://localhost:3000/calculate"',
+                        url: "http://localhost:3000/tasks",
                         headers: {
                             'x-auth-token': localStorage.getItem("access-token")
                         },
                         method: 'POST',
                         dataType: 'json',
-                        data: {data},
+                        data: {matrix, vector},
                         success: function (data) {
                             alert("Data Send");
-                            window.location.href = "http://localhost:3000/history.html";
+                            window.location.href = "http://localhost:3000/progress.html";
                         },
                         error: function (data) {
                             alert("error: " + data.responseText);
