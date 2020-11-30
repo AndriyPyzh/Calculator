@@ -13,12 +13,79 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#menu').load('menu.html');
+            let tasks;
+            $.ajax({
+                type: 'GET',
+                url: `http://localhost:3000/tasks/finished`,
+                headers: {
+                    'x-auth-token': localStorage.getItem("access-token")
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    alert("succes");
+                    tasks = data;
+
+                    let tasksHtml = '<div id="tasks">';
+                    tasks.forEach(task => {
+                        let equations = `<table class="table table-borderless" style="width: ${task.matrix[0].length *100}px"><tbody>`;
+                        let trs;
+                        task.matrix.forEach(row => {
+                            trs = `<tr><td>${row[0]} x1</td>`;
+                            for (let i = 1; i < row.length - 1; i++) {
+                                trs += `<td>+</td>`
+                                trs += `<td>${row[i]} x${i+1}</td>`
+                            }
+                            trs += `<td>=</td><td>${row[row.length - 1]}</td></tr>`;
+                            equations += trs;
+                        })
+                        equations += `</tbody></table>`;
+
+                        let result = `<table class="table table-borderless ml-5" style="width: 100px;"><tbody>`;
+
+                        for (let i = 0; i < task.result.length; i++) {
+                            result += `
+                            <tr>
+                                <td>x${i + 1}</td>
+                                <td>=</td>
+                                <td>${task.result[i]}</td>
+                            </tr>`
+                        }
+                        result += `</tbody></table>`;
+
+                        tasksHtml += `
+                            <div class="row card mt-3" style="height: ${70+task.matrix.length * 60}px">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-center">
+                                        <h3>${task.name}</h3>
+                                    </div>
+
+                                    <div class="d-flex justify-content-center" style="font-size: 20px">
+                                        ${equations}
+                                        ${result}
+                                    </div>
+                                </div>
+                            </div>`
+                    })
+                    tasksHtml += '</div>'
+
+                    $("#tasks").replaceWith(tasksHtml);
+                },
+                error: function (data) {
+                    alert("error: " + data.responseText);
+                }
+            });
         });
     </script>
     <title>History</title>
 </head>
 <body>
 <div id="menu" class="mb-5"></div>
-
+<div class="container d-flex justify-content-center">
+    <div style="width: 800px">
+        <h1 class="d-flex justify-content-start mb-5">History</h1>
+        <div id="tasks">
+        </div>
+    </div>
+</div>
 </body>
 </html>
