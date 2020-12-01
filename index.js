@@ -1,15 +1,9 @@
+const {sin} = require('Math');
 
-function start(callback){
-    setTimeo
-    console.log('start');
-    return callback();
-}
+import * from "Math";
 
-function end(){
-    console.log('end');
-    return true;
-}
+var x = 10
 
-var res = start(end);
+const f = eval('sin(x)');
 
-console.log(res);
+console.log(f);

@@ -53,13 +53,18 @@
                         }
                         result += `</tbody></table>`;
 
+                        let stoppedHTML = `<h6 style="color:red">(stopped)</h6>`
+                        let finishedHTML = `<h6 style="color:green">(finished)</h6>`
+
                         tasksHtml += `
-                            <div class="row card mt-3" style="height: ${70 + task.matrix.length * 60}px">
+                            <div class="row card mt-3" style="height: ${100 + task.matrix.length * 60}px">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-center">
                                         <h3>${task.name}</h3>
                                     </div>
-
+                                    <div class="d-flex justify-content-center">
+                                        ${task.isStopped ? stoppedHTML : finishedHTML}
+                                    </div>
                                     <div class="d-flex justify-content-center" style="font-size: 20px">
                                         ${equations}
                                         ${result}
