@@ -1,40 +1,118 @@
 <!DOCTYPE HTML>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-              name="viewport">
-        <meta content="ie=edge" http-equiv="X-UA-Compatible">
-        <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
 
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#menu').load('menu.html');
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#menu').load('menu.html');
 
-                $('.btn-light').click(function (){
-                    alert(this.id);
-                });
+            $('#solution').click(function () {
+                window.location.href = "http://localhost:4001/history.html";
+            })
 
-                let username = localStorage.getItem('username');
-                let tasks;
-                $.ajax({
-                    type: 'GET',
-                    url: `http://localhost:4001/tasks?username=${username}`,
-                    headers: {
-                        'x-auth-token': localStorage.getItem("access-token")
-                    },
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (data) {
-                        alert("succes");
-                        tasks = data;
+            let tasks;
 
-                        let tasksHtml = '<div id="tasks">';
-                        tasks.forEach(task => {
-                            tasksHtml += `
+            $.ajax({
+                type: 'GET',
+                url: `http://localhost:4001/tasks/running`,
+                headers: {
+                    'x-auth-token': localStorage.getItem("access-token")
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    tasks = data;
+                },
+                error: function (data) {
+                    alert("error: " + data.responseText);
+                }
+            });
+
+            $(function () {
+                setInterval(oneSecondFunction, 1000);
+            });
+
+            function oneSecondFunction() {
+                tasks.forEach(task => {
+                    $.ajax({
+                        type: 'GET',
+                        url: `http://localhost:4001/tasks/${task.name}`,
+                        headers: {
+                            'x-auth-token': localStorage.getItem("access-token")
+                        },
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            task = data;
+                            let tasksHtml = '<div id="tasks">';
+                            if (task.isStopped) {
+                                tasksHtml += `
+                             <div class="row card mt-8" style="height: 170px">
+                                <div class="card-body">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h3 class="float-left">${task.name}</h3>
+                                    <div class="progress mt-8" style="width: 1200px">
+                                    <div class="progress-bar progress-bar-orange progress-bar-striped progress-bar-animated text-dark font-weight-bold" role="progressbar" style="width: 100%" aria-valuenow="75"
+                                             aria-valuemin="0"
+                                             aria-valuemax="100">stop</div>
+                                    </div>
+                                    <div class="float-right mt-4">
+                                        <a href="history.html" class="btn btn-lg btn-primary ml-3">history</a>
+                                    </div>
+                                </div>
+                            </div>`
+                            } else if (task.progress === 100) {
+                            //     tasksHtml += `
+                            // <div class="row card mt-3" style="height: 170px">
+                            //     <div class="card-body">
+                            //         <h3>${task.name} finished</h3>
+                            //         <div class="progress mt-3" style="width: 790px">
+                            //         <div class="progress-bar  bg-success" role="progressbar" style="width: 100%" aria-valuenow="75"
+                            //                  aria-valuemin="0"
+                            //                  aria-valuemax="100"></div>
+                            //         </div>
+                            //         <div class="float-right mt-4">
+                            //             <a href="history.html" class="btn btn-lg btn-primary ml-3">solution</a>
+                            //         </div>
+                            //     </div>
+                            // </div>`
+                                tasksHtml += `
+                                <div class="row card mt-8" style="height: 170px">
+                                <div class="card-body">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h3 class="float-left">${task.name}</h3>
+                                    <div class="progress mt-8" style="width: 1200px">
+                                    <div class="progress-bar  progress-bar-orange progress-bar-striped progress-bar-animated text-dark font-weight-bold" role="progressbar" style="width: 100%" aria-valuenow="75"
+                                             aria-valuemin="0"
+                                             aria-valuemax="100"></div>
+                                    </div>
+                                    <div class="float-right mt-4">
+                                        <a href="history.html" class="btn btn-lg btn-primary ml-3">solution</a>
+                                    </div>
+                                </div>
+                            </div>`
+                            } else {
+                            //     tasksHtml += `
+                            // <div class="row card mt-3" style="height: 170px">
+                            //     <div class="card-body">
+                            //         <h3>${task.name} ${task.progress}</h3>
+                            //         <div class="progress mt-3" style="width: 790px">
+                            //         <div class="progress-bar " role="progressbar" style="width: ${task.progress}%" aria-valuenow="75"
+                            //                  aria-valuemin="0"
+                            //                  aria-valuemax="100"></div>
+                            //         </div>
+                            //         <div class="float-right mt-4">
+                            //             <button id="${task.name}" type="button" onclick="stop(id)" class="btn btn-lg btn-danger ml-3">Stop</button>
+                            //         </div>
+                            //     </div>
+                            // </div>`
+                                tasksHtml += `
                             <div class="row card mt-8" style="height: 170px">
                                 <div class="card-body">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -42,51 +120,167 @@
                                 <div class="progress mt-8" style="width: 1200px">
                                     <div class="progress-bar progress-bar-orange progress-bar-striped progress-bar-animated text-dark font-weight-bold" role="progressbar" style="width: ${task.percentage}% "  aria-valuenow="${task.percentage}"
                                          aria-valuemin="0"
-                                         aria-valuemax="100">${task.percentage}%</div>
+                                         aria-valuemax="100">${task.progress}%</div>
                                 </div>
                                 <div class="float-right mt-4">
-                                    <button id="pause" type="button" class="btn btn-lg bt ml-3 btn-black" >Pause</button>
+                                    <button  id="${task.name}" type="button" onclick="stop(id)" class="btn btn-lg bt ml-3 btn-black" >Pause</button>
                                 </div>
                             </div>
                           </div>
                             <br>`
-                        })
-                        tasksHtml += '</div>'
+                            }
+                            tasksHtml += '</div>'
 
-                        $("#tasks").replaceWith(tasksHtml);
-                    },
-                    error: function (data) {
-                        alert("error: " + data.responseText);
-                    }
-                });
+                            $("#tasks").replaceWith(tasksHtml);
+
+                        },
+                        error: function (data) {
+                            //alert("error: " + data.responseText);
+                        }
+                    });
+
+
+                })
+            }
+        });
+
+        function stop(task) {
+            $.ajax({
+                type: 'PATCH',
+                url: `http://localhost:4001/tasks/${task.name}/stop`,
+                headers: {
+                    'x-auth-token': localStorage.getItem("access-token")
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    alert('success');
+                },
+                error: function (data) {
+                    alert("error: " + data.responseText);
+                }
             });
-        </script>
-        <title>Progress</title>
-    </head>
-    <style type="text/css">
-        body {
-            font-family: 'Varela Round', sans-serif;
         }
-        .card-body #pause
-        {
-            background: darksalmon;
-        }
-        .card-body #pause:hover
-        {
-           color: white;
-        }
-        .progress-bar-orange {
-            background-color: lightsalmon !important;
-        }
-    </style>
-    <body>
-        <div id="menu" class="mb-10"></div>
-        <div class="container d-flex justify-content-center ">
-            <div style="width: 1300px">
-                <br>
-                <div id="tasks">
-                </div>
-            </div>
+    </script>
+    <title>Progress</title>
+</head>
+<style type="text/css">
+    body {
+        font-family: 'Varela Round', sans-serif;
+    }
+    .card-body .btn
+    {
+        background: darksalmon;
+    }
+    .card-body .btn:hover
+    {
+        color: white;
+    }
+    .progress-bar-orange {
+        background-color: lightsalmon !important;
+    }
+</style>
+<body>
+<div id="menu" class="mb-10"></div>
+<div class="container d-flex justify-content-center ">
+    <div style="width: 1300px">
+        <br>
+        <div id="tasks">
         </div>
-    </body>
+    </div>
+</div>
+
+
+</body>
 </html>
+<!--<!DOCTYPE HTML>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"-->
+<!--          name="viewport">-->
+<!--    <meta content="ie=edge" http-equiv="X-UA-Compatible">-->
+<!--    <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">-->
+
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"-->
+<!--          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+<!--    <script type="text/javascript">-->
+<!--        $(document).ready(function () {-->
+<!--            $('#menu').load('menu.html');-->
+
+<!--            $('.btn-light').click(function (){-->
+<!--                alert(this.id);-->
+<!--            });-->
+
+<!--            let username = localStorage.getItem('username');-->
+<!--            let tasks;-->
+<!--            $.ajax({-->
+<!--                type: 'GET',-->
+<!--                url: `http://localhost:4001/tasks?username=${username}`,-->
+<!--                headers: {-->
+<!--                    'x-auth-token': localStorage.getItem("access-token")-->
+<!--                },-->
+<!--                contentType: 'application/json; charset=utf-8',-->
+<!--                success: function (data) {-->
+<!--                    alert("succes");-->
+<!--                    tasks = data;-->
+
+<!--                    let tasksHtml = '<div id="tasks">';-->
+<!--                    tasks.forEach(task => {-->
+<!--                        tasksHtml += `-->
+<!--                            <div class="row card mt-8" style="height: 170px">-->
+<!--                                <div class="card-body">-->
+<!--                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+<!--                                <h3 class="float-left">${task.name}</h3>-->
+<!--                                <div class="progress mt-8" style="width: 1200px">-->
+<!--                                    <div class="progress-bar progress-bar-orange progress-bar-striped progress-bar-animated text-dark font-weight-bold" role="progressbar" style="width: ${task.percentage}% "  aria-valuenow="${task.percentage}"-->
+<!--                                         aria-valuemin="0"-->
+<!--                                         aria-valuemax="100">${task.percentage}%</div>-->
+<!--                                </div>-->
+<!--                                <div class="float-right mt-4">-->
+<!--                                    <button id="pause" type="button" class="btn btn-lg bt ml-3 btn-black" >Pause</button>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                            <br>`-->
+<!--                    })-->
+<!--                    tasksHtml += '</div>'-->
+
+<!--                    $("#tasks").replaceWith(tasksHtml);-->
+<!--                },-->
+<!--                error: function (data) {-->
+<!--                    alert("error: " + data.responseText);-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--&lt;!&ndash;    </script>&ndash;&gt;-->
+<!--    <title>Progress</title>-->
+<!--</head>-->
+<!--<style type="text/css">-->
+<!--    body {-->
+<!--        font-family: 'Varela Round', sans-serif;-->
+<!--    }-->
+<!--    .card-body #pause-->
+<!--    {-->
+<!--        background: darksalmon;-->
+<!--    }-->
+<!--    .card-body #pause:hover-->
+<!--    {-->
+<!--        color: white;-->
+<!--    }-->
+<!--    .progress-bar-orange {-->
+<!--        background-color: lightsalmon !important;-->
+<!--    }-->
+<!--</style>-->
+<!--<body>-->
+<!--<div id="menu" class="mb-10"></div>-->
+<!--<div class="container d-flex justify-content-center ">-->
+<!--    <div style="width: 1300px">-->
+<!--        <br>-->
+<!--        <div id="tasks">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->

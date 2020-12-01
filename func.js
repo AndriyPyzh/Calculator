@@ -1,4 +1,4 @@
-
+import {sin} from "Math";
 var x=4;
 var n= 8;
 var a=0;
@@ -9,13 +9,11 @@ var f='sin(x)';
 
 function func(num,f){
     var x=num;
-    with (Math)
-    {
-        return eval(f);
-    }
+    return eval(f);
+
 }
-// var r= func(4.5, f);
-// console.log(r);
+var r= func(4.5, f);
+console.log(r);
 function Newton(a,b,n,x,e,f) {
     var xArr = [];
     var yArr = [];

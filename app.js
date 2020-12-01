@@ -63,6 +63,7 @@ app.use('/hello',async (req,res)=>{
 
 app.use(helmet());
 app.use(morgan('tiny'));
+app.disable('etag');
 
 const port = process.env.PORT || 3000;
 

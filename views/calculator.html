@@ -28,7 +28,7 @@
                         alert("Incorrect data")
                     } else {
                         $.ajax({
-                            url: '"http://localhost:4001/calculate"',
+                            url: 'http://localhost:4001/tasks',
                             headers: {
                                 'x-auth-token': localStorage.getItem("access-token")
                             },
@@ -37,7 +37,7 @@
                             data: {a,b,e,f,x},
                             success: function (data) {
                                 alert("Data Send");
-                                window.location.href = "http://localhost:4001/history.html";
+                                //window.location.href = "http://localhost:4001/history.html";
                             },
                             error: function (data) {
                                 alert("error: " + data.responseText);
@@ -107,9 +107,9 @@
                 <button id="solve" type="button" class="btn btn-lg ">solve</button>
             </div>
             <br>
-            <div class=" d-flex justify-content-center" style="font-size: x-large">
-                <span>Result</span>
-            </div>
+<!--            <div class=" d-flex justify-content-center" style="font-size: x-large">-->
+<!--                <span>Result</span>-->
+<!--            </div>-->
         </div>
     </body>
 </html>

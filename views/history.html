@@ -22,22 +22,23 @@
                 },
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
-                    alert("succes");
                     tasks = data;
 
                     let tasksHtml = '<div id="tasks">';
                     tasks.forEach(task => {
-                        let equations = `<table class="table table-borderless" style="width: ${task.matrix[0].length *100}px"><tbody>`;
+                        let equations = `<table class="table table-borderless" style="width: ${task.matrix[0].length * 130}px"><tbody>`;
                         let trs;
-                        task.matrix.forEach(row => {
-                            trs = `<tr><td>${row[0]} x1</td>`;
-                            for (let i = 1; i < row.length - 1; i++) {
+
+                        for (let k = 0; k < task.vector.length; k++) {
+                            trs = `<tr><td>${task.matrix[k][0]} x1</td>`;
+                            for (let i = 1; i < task.matrix[k].length; i++) {
                                 trs += `<td>+</td>`
-                                trs += `<td>${row[i]} x${i+1}</td>`
+                                trs += `<td>${task.matrix[k][i]} x${i + 1}</td>`
                             }
-                            trs += `<td>=</td><td>${row[row.length - 1]}</td></tr>`;
+                            trs += `<td>=</td><td>${task.vector[k]}</td></tr>`;
+
                             equations += trs;
-                        })
+                        }
                         equations += `</tbody></table>`;
 
                         let result = `<table class="table table-borderless ml-5" style="width: 100px;"><tbody>`;
@@ -53,7 +54,7 @@
                         result += `</tbody></table>`;
 
                         tasksHtml += `
-                            <div class="row card mt-3" style="height: ${70+task.matrix.length * 60}px">
+                            <div class="row card mt-3" style="height: ${70 + task.matrix.length * 60}px">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-center">
                                         <h3>${task.name}</h3>

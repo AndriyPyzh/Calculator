@@ -1,114 +1,94 @@
-const runTask = async (task) => {
+import {Tasks} from "../models/Task";
+require('dotenv').config();
+
+
+const runTask = async (task, creator) => {
     task.status = 'running';
     task.startedAt = Date.now();
 
     await task.save();
-
-    calculate(task);
+    calculate(task, creator);
 };
 
-const calculate = async (task) => {
-    const timeToSleep = 10000;
+const calculate = async (task, creator) => {
+    let error = false;
+    const timeToSleep = process.env.SLEEP_TIME;
 
-    function sleep(milliseconds) {
-        const date = Date.now();
-        let currentDate = null;
-        do {
-            currentDate = Date.now();
-        } while (currentDate - date < milliseconds);
+    task = await Tasks.findOne({name: task.name, user: creator});
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
+    console.log("here");
 
-    let {matrix, vector} = task;
+    var x=task.x;
+    var n= 20;
+    var a=task.a;
+    var b=task.b;
+    var e=task.e;
+    var f=task.f;
 
-    async function diagonalize(M) {
-        const m = M.length;
-        const n = M[0].length;
-        let i_max;
-        for (let k = 0; k < Math.min(m, n); ++k) {
 
-            sleep(timeToSleep);
+    function func(num,f){
+        var x=num;
+        return eval(f);
 
-            i_max = findPivot(M, k);
-            if (matrix[i_max][k] === 0)
-                await swap_rows(M, k, i_max);
-            for (let i = k + 1; i < m; ++i) {
-                const c = matrix[i][k] / matrix[k][k];
-                for (let j = k + 1; j < n; ++j) {
-                    matrix[i][j] = matrix[i][j] - matrix[k][j] * c;
+    }
+// var r= func(4.5, f);
+// console.log(r);
+    function Newton(a,b,n,x,e,f) {
+        var xArr = [];
+        var yArr = [];
+        while (xArr.length < n) {
+            var r = a + Math.random() * (b - a);
+            if (xArr.indexOf(r) === -1) xArr.push(r);
+        }
+        xArr.sort();
+        //console.log(xArr);
+
+        for (i = 0; i < xArr.length; i++) {
+            yArr.push(func(xArr[i], f));
+        }
+        //console.log(yArr);
+         let separationMatrix = [];
+
+        for (var i = 0; i < xArr.length; i++) {
+            separationMatrix[i] = [];
+            for (var j = 0; j < xArr.length; j++) {
+                separationMatrix[i][j] = 0
+            }
+        }
+        //console.log(separationMatrix);
+
+        for (let i = 1; i < xArr.length; i++) {
+            for (let j = 1; j < xArr.length - i + 1; j++) {
+                if (i === 1) {
+                    separationMatrix[j][i] = (yArr[j] - yArr[j - 1]) / (xArr[j] - xArr[j - 1]);
+                } else {
+                    separationMatrix[j][i] = (separationMatrix[j + 1][i - 1] - separationMatrix[j][i - 1]) / (xArr[j + i - 1] - xArr[j - 1]);
                 }
-                M[i][k] = 0;
-            }
-
-            task.progress += 100 / Math.min(m, n);
-            if (task.progress >= 100) {
-                task.status = 'finished';
-            }
-            console.log(task.name);
-
-            await task.save();
-        }
-    }
-
-    function findPivot(M, k) {
-        let i_max = k;
-        for (let i = k + 1; i < M.length; ++i) {
-            if (Math.abs(M[i][k]) > Math.abs(M[i_max][k])) {
-                i_max = i;
             }
         }
-        return i_max;
-    }
+        //console.log(separationMatrix)
+        let d = 1;
+        let result = yArr[xArr.length - 1];
+        //console.log(result);
+        for (let iter = 1; iter < xArr.length; iter++) {
+            d = d * (x - xArr[xArr.length - iter]);
+            let dod = separationMatrix[iter][xArr.length - iter] * d;
 
-    async function swap_rows(M, i_max, k) {
-        if (i_max !== k) {
-            const temp = M[i_max];
-            M[i_max] = M[k];
-            M[k] = temp;
-        }
-    }
-
-    async function makeM(A, b) {
-        for (let i = 0; i < A.length; ++i) {
-            A[i].push(b[i]);
-        }
-    }
-
-    async function substitute(M) {
-        const m = M.length;
-        for (let i = m - 1; i >= 0; --i) {
-            const x = M[i][m] / M[i][i];
-            for (let j = i - 1; j >= 0; --j) {
-                M[j][m] -= x * M[j][i];
-                M[j][i] = 0;
+            if (Math.abs(separationMatrix[iter][xArr.length - iter]) < e) {
+                result += dod;
+                break;
             }
-            M[i][m] = x;
-            M[i][i] = 1;
+            result += dod;
         }
+        return  result;
     }
-
-    async function extractX(M) {
-        const x = [];
-        const m = M.length;
-        const n = M[0].length;
-        for (let i = 0; i < m; ++i) {
-            x.push(M[i][n - 1]);
-        }
-        return x;
-    }
-
-    async function solve(A, b) {
-        await makeM(A, b);
-
-        await diagonalize(A);
-
-        await substitute(A);
-
-        return extractX(A);
-    }
-
-    task.result = await solve(matrix, vector);
-    console.log(task.result);
+    task.result=Newton(a, b, n, x, e, f);
     await task.save();
+    console.log(task.result);
+
 };
 
 module.exports = {runTask};
