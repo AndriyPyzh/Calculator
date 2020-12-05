@@ -118,9 +118,10 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h3 class="float-left">${task.name}</h3>
                                 <div class="progress mt-8" style="width: 1200px">
-                                    <div class="progress-bar progress-bar-orange progress-bar-striped progress-bar-animated text-dark font-weight-bold" role="progressbar" style="width: ${task.percentage}% "  aria-valuenow="${task.percentage}"
+                                    <div class="progress-bar progress-bar-orange "
+                                     role="progressbar" style="width: ${task.progress}"
                                          aria-valuemin="0"
-                                         aria-valuemax="100">${task.progress}%</div>
+                                         aria-valuemax="100"></div>
                                 </div>
                                 <div class="float-right mt-4">
                                     <button  id="${task.name}" type="button" onclick="stop(id)" class="btn btn-lg bt ml-3 btn-black" >Pause</button>
@@ -138,8 +139,6 @@
                             //alert("error: " + data.responseText);
                         }
                     });
-
-
                 })
             }
         });
