@@ -124,7 +124,7 @@
                                          aria-valuemax="100"></div>
                                 </div>
                                 <div class="float-right mt-4">
-                                    <button  id="${task.name}" type="button" onclick="stop(task)" class="btn btn-lg bt ml-3 btn-black" >Stop</button>
+                                    <button  id="${task.name}" type="button" onclick="stop(id)" class="btn btn-lg bt ml-3 btn-black" >Stop</button>
                                 </div>
                             </div>
                           </div>
@@ -146,7 +146,7 @@
         function stop(task) {
             $.ajax({
                 type: 'PATCH',
-                url: `http://localhost:4001/tasks/${task.name}/stop`,
+                url: `http://localhost:4001/tasks/${task}/stop`,
                 headers: {
                     'x-auth-token': localStorage.getItem("access-token")
                 },
