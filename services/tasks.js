@@ -1,4 +1,5 @@
 import {Tasks} from "../models/Task";
+
 require('dotenv').config();
 
 
@@ -19,24 +20,26 @@ const calculate = async (task, creator) => {
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+
     console.log("here");
 
-    var x=task.x;
-    var n= 20;
-    var a=task.a;
-    var b=task.b;
-    var e=task.e;
-    var f=task.f;
+    var x = task.x;
+    var n = 20;
+    var a = task.a;
+    var b = task.b;
+    var e = task.e;
+    var f = task.f;
 
 
-    function func(num,f){
-        var x=num;
+    function func(num, f) {
+        var x = num;
         return eval(f);
 
     }
+
 // var r= func(4.5, f);
 // console.log(r);
-    function Newton(a,b,n,x,e,f) {
+    async function Newton(a, b, n, x, e, f) {
         var xArr = [];
         var yArr = [];
         while (xArr.length < n) {
@@ -50,7 +53,7 @@ const calculate = async (task, creator) => {
             yArr.push(func(xArr[i], f));
         }
         //console.log(yArr);
-         let separationMatrix = [];
+        let separationMatrix = [];
 
         for (var i = 0; i < xArr.length; i++) {
             separationMatrix[i] = [];
@@ -61,6 +64,7 @@ const calculate = async (task, creator) => {
         //console.log(separationMatrix);
 
         for (let i = 1; i < xArr.length; i++) {
+            await sleep(timeToSleep);
             for (let j = 1; j < xArr.length - i + 1; j++) {
                 if (i === 1) {
                     separationMatrix[j][i] = (yArr[j] - yArr[j - 1]) / (xArr[j] - xArr[j - 1]);
@@ -68,6 +72,19 @@ const calculate = async (task, creator) => {
                     separationMatrix[j][i] = (separationMatrix[j + 1][i - 1] - separationMatrix[j][i - 1]) / (xArr[j + i - 1] - xArr[j - 1]);
                 }
             }
+            task.progress += 100 / xArr.length;
+            if (task.progress >= 100) {
+                task.status = 'finished';
+            }
+            if (task.isStopped) {
+                task.status = 'finished';
+                error = true;
+                await task.save();
+                return;
+            }
+            await task.save();
+
+            task = await Tasks.findOne({name: task.name, user: creator});
         }
         //console.log(separationMatrix)
         let d = 1;
@@ -83,9 +100,11 @@ const calculate = async (task, creator) => {
             }
             result += dod;
         }
-        return  result;
+
+        return result;
     }
-    task.result=Newton(a, b, n, x, e, f);
+
+    task.result = await Newton(a, b, n, x, e, f);
     await task.save();
     console.log(task.result);
 
