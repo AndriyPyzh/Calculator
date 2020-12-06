@@ -63,10 +63,14 @@ const stopTask = asyncHandler(async (req, res) => {
 
     const creator = await Users.findOne({username: user});
     const task = await Tasks.findOne({name, user: creator});
+    
+    console.log(task);
 
     if (!task) {
         res.status(StatusCodes.NOT_FOUND).json();
     }
+    
+    console.log(JSON.stringify(task));
 
     task.isStopped = true;
     await task.save()
