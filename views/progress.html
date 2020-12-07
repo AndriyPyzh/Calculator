@@ -40,6 +40,8 @@
             });
 
             function oneSecondFunction() {
+                let tasksHtml = '<div id="tasks">';
+
                 tasks.forEach(task => {
                     $.ajax({
                         type: 'GET',
@@ -50,7 +52,6 @@
                         contentType: 'application/json; charset=utf-8',
                         success: function (data) {
                             task = data;
-                            let tasksHtml = '<div id="tasks">';
                             if (task.progress === 100 && task.result.length) {
                                 tasksHtml += `
                             <div class="row card mt-3" style="height: 170px">
@@ -67,7 +68,7 @@
                                 </div>
                             </div>`
                             } else if (task.isStopped || (task.status === 'finished' && !task.result.length)) {
-                                if (task.status === 'finished' && !task.result.length && !task.isStopped){
+                                if (task.status === 'finished' && !task.result.length && !task.isStopped) {
                                     alert("answer not found");
                                     stop(task.name);
                                 }
@@ -101,18 +102,20 @@
                                 </div>
                             </div>`
                             }
-                            tasksHtml += '</div>'
-
-                            $("#tasks").replaceWith(tasksHtml);
-
                         },
                         error: function (data) {
                             alert("error: " + data.responseText);
                         }
                     });
-
-
                 })
+
+                setTimeout(replace, 1000);
+
+                function replace() {
+                    tasksHtml += '</div>'
+
+                    $("#tasks").replaceWith(tasksHtml);
+                }
             }
         });
 
